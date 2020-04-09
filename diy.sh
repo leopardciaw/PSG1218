@@ -18,4 +18,10 @@ sed -i 's/OpenWrt/Leopard build $(date "+%Y.%m.%d") @ OpenWrt/g' package/lean/de
 sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/themes/luci-theme-bootstrap/root/etc/uci-defaults/30_luci-theme-bootstrap
 
 # 添加clash支持
-git clone https://github.com/frainzy1477/luci-app-clash.git package/lean/luci-app-clash
+# git clone https://github.com/frainzy1477/luci-app-clash.git package/lean/luci-app-clash
+
+# 添加v2ray
+git clone https://github.com/kuoruan/luci-app-v2ray.git package/lean/luci-app-v2ray
+rm rm -rf package/lean/v2ray
+git clone https://github.com/KFERMercer/openwrt-v2ray.git package/lean/v2ray
+
