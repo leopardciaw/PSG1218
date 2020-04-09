@@ -17,3 +17,5 @@ sed -i 's/OpenWrt/Leopard build $(date "+%Y.%m.%d") @ OpenWrt/g' package/lean/de
 # 去除默认主题
 sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/themes/luci-theme-bootstrap/root/etc/uci-defaults/30_luci-theme-bootstrap
 
+# 添加clash支持
+git clone https://github.com/frainzy1477/luci-app-clash.git package/lean/luci-app-clash
