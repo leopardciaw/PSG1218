@@ -25,3 +25,4 @@ sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/theme
 # rm rm -rf package/lean/v2ray
 # git clone https://github.com/KFERMercer/openwrt-v2ray.git package/lean/v2ray
 
+git clone https://github.com/frainzy1477/luci-app-clash.git package/lean/luci-app-clash
