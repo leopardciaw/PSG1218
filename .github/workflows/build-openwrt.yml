@@ -6,27 +6,28 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build OpenWrt
+name: Lienol_psg1218a
 
 on:
   release:
     types: published
   push:
     branches:
-      - master
+#      - master
 #    paths:
 #      - '.config'
 #  schedule:
-#    - cron: 0 8 * * 5
+#    - cron: 0 8 1 * *
 #  watch:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/Lienol/openwrt
+  REPO_BRANCH: dev-lean-lede
   CONFIG_FILE: .config
   DIY_SH: diy.sh
-  SSH_ACTIONS: false
+  FREE_UP_DISK: false
+  SSH_ACTIONS: true
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -38,10 +39,10 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - name: Checkout
+    - name: 检查
       uses: actions/checkout@master
 
-    - name: Initialization environment
+    - name: 初始化环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -52,29 +53,37 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
-
-    - name: Clone source code
+    
+    - name: 释放磁盘空间
+      if: env.FREE_UP_DISK == 'true'
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        docker rmi `docker images -q`
+        sudo -E apt-get -q purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+    
+    - name: 克隆源代码
       run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+    - name: 更新安装提要
+      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a && ./scripts/feeds install -a
 
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Load custom configuration
+    - name: 加载自定义配置
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
         cd openwrt
         ../$DIY_SH
-
-    - name: SSH connection to Actions
+    
+    - name: SSH连接到操作
       uses: P3TERX/debugger-action@master
       if: env.SSH_ACTIONS == 'true'
 
-    - name: Download package
+    - name: 下载dl文件包
       id: package
       run: |
         cd openwrt
@@ -82,23 +91,23 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
-
-    - name: Compile the firmware
+    
+    - name: 编译固件
       id: compile
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 V=s
         echo "::set-output name=status::success"
-
-    - name: Upload bin directory
+    
+    - name: 上传bin目录
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin
         path: openwrt/bin
 
-    - name: Organize files
+    - name: 组织文件
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
@@ -106,16 +115,16 @@ jobs:
         rm -rf packages
         echo "::set-env name=FIRMWARE::$PWD"
         echo "::set-output name=status::success"
-
-    - name: Upload firmware directory
+    
+    - name: 上传固件目录
       uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware
         path: ${{ env.FIRMWARE }}
 
-    - name: Upload firmware to cowtransfer
+    - name: 将固件上传到奶牛快傳
       if: env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         curl -sL https://git.io/cowtransfer | sh
-        ./cowtransfer-uploader -s -p 8 ${FIRMWARE}
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ${FIRMWARE}
