@@ -79,9 +79,9 @@ jobs:
         cd openwrt
         ../$DIY_SH
     
-    - name: SSH连接到操作
-      uses: P3TERX/debugger-action@master
-      if: env.SSH_ACTIONS == 'true'
+#    - name: SSH连接到操作
+#      uses: P3TERX/debugger-action@master
+#      if: env.SSH_ACTIONS == 'true'
 
     - name: 下载dl文件包
       id: package
