@@ -11,8 +11,8 @@ name: Lienol_psg1218a
 on:
   release:
     types: published
-  push:
-    branches:
+#  push:
+#    branches:
 #      - master
 #    paths:
 #      - '.config'
