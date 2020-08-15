@@ -25,3 +25,7 @@ sed -i 's/OpenWrt/Leopard build $(date "+%Y.%m.%d") @ OpenWrt/g' package/default
 # rm rm -rf package/lean/v2ray
 # git clone https://github.com/KFERMercer/openwrt-v2ray.git package/lean/v2ray
 # git clone https://github.com/frainzy1477/luci-app-clash.git package/lean/luci-app-clash
+
+# 增加ssr
+# git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
+git clone https://github.com/fw876/helloworld.git package/openwrt-packages/luci-app-ssr-plus
