@@ -27,7 +27,7 @@ env:
   CONFIG_FILE: .config
   DIY_SH: diy.sh
   FREE_UP_DISK: false
-  SSH_ACTIONS: false
+  SSH_ACTIONS: true
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
