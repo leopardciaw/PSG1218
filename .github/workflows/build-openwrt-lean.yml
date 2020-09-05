@@ -13,11 +13,11 @@ on:
   repository_dispatch:
 #  release:
 #    types: published
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 #    paths:
-#      - 'acrh17.config'
+#      - '.config'
   schedule:
     - cron: 30 18 * * 5
 #          分 时 日 月 周5
