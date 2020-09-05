@@ -31,12 +31,12 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_SH: diy.sh
-  SSH_ACTIONS: true
+  SSH_ACTIONS: false
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
