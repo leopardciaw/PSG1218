@@ -19,7 +19,7 @@ on:
 #    paths:
 #      - '.config'
   schedule:
-    - cron: 5 1 * * *
+    - cron: 35 6 * * *
 #          分 时 日 月 周5
 #   - cron: 0 8 */3 * *
 #  watch:
